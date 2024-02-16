@@ -15,7 +15,7 @@ import { calculateDistance } from "utils/location";
 import { Store } from "types/delivery";
 import { calcFinalPrice } from "utils/product";
 import { wait } from "utils/async";
-import categories from "../mock/categories.json";
+import { getConfig } from "utils/config";
 
 export const authorizedState = selector({
   key: "authorized",
@@ -38,51 +38,30 @@ export const userState = selector({
 
 export const categoriesState = selector<Category[]>({
   key: "categories",
-  get: () => categories,
-});
-
-export const productsState = selector<Product[]>({
-  key: "products",
   get: async () => {
-    await wait(2000);
-    const products = (await import("../mock/products.json")).default;
-    const variants = (await import("../mock/variants.json"))
-      .default as Variant[];
-    return products.map(
-      (product) =>
-        ({
-          ...product,
-          variants: variants.filter((variant) =>
-            product.variantId.includes(variant.id),
-          ),
-        }) as Product,
+    const url = getConfig((config) => config.api.baseUrl);
+    const apiKey = getConfig((config) => config.api.apiKey);
+
+    const response = await fetch(`${url}/categories`, {
+      headers: {
+        "x-api-key": apiKey,
+      },
+    });
+
+    const data = await response.json();
+    return data.map(
+      ({ id, name, image, description }) =>
+        <Category>{
+          id,
+          name,
+          icon: image || logo,
+        }
     );
   },
 });
 
-export const recommendProductsState = selector<Product[]>({
-  key: "recommendProducts",
-  get: ({ get }) => {
-    const products = get(productsState);
-    return products.filter((p) => p.sale);
-  },
-});
-
-export const selectedCategoryIdState = atom({
+export const selectedCategoryIdState = atom<number>({
   key: "selectedCategoryId",
-  default: "coffee",
-});
-
-export const productsByCategoryState = selectorFamily<Product[], string>({
-  key: "productsByCategory",
-  get:
-    (categoryId) =>
-    ({ get }) => {
-      const allProducts = get(productsState);
-      return allProducts.filter((product) =>
-        product.categoryId.includes(categoryId),
-      );
-    },
 });
 
 export const cartState = atom<Cart>({
@@ -127,26 +106,6 @@ export const notificationsState = atom<Notification[]>({
       content: "Nhập WELCOME để được giảm 50% giá trị đơn hàng đầu tiên order",
     },
   ],
-});
-
-export const keywordState = atom({
-  key: "keyword",
-  default: "",
-});
-
-export const resultState = selector<Product[]>({
-  key: "result",
-  get: async ({ get }) => {
-    const keyword = get(keywordState);
-    if (!keyword.trim()) {
-      return [];
-    }
-    const products = get(productsState);
-    await wait(500);
-    return products.filter((product) =>
-      product.name.trim().toLowerCase().includes(keyword.trim().toLowerCase()),
-    );
-  },
 });
 
 export const storesState = atom<Store[]>({

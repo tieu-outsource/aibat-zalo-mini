@@ -39,7 +39,7 @@ export interface Product {
   name: string;
   image: string;
   price: number;
-  categoryId: string[];
+  categoryId?: string[];
   description?: string;
   sale?: Sale;
   variants?: Variant[];

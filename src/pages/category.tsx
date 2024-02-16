@@ -1,20 +1,18 @@
 import { ProductItem } from "components/product/item";
 import React, { FC, Suspense } from "react";
 import { useRecoilValue } from "recoil";
-import {
-  categoriesState,
-  productsByCategoryState,
-  selectedCategoryIdState,
-} from "state";
+import { categoriesState, selectedCategoryIdState } from "state";
+import { productsByCategoryState } from "state/product";
 import { Box, Header, Page, Tabs, Text } from "zmp-ui";
 
 const CategoryPicker: FC = () => {
   const categories = useRecoilValue(categoriesState);
   const selectedCategory = useRecoilValue(selectedCategoryIdState);
+
   return (
     <Tabs
       scrollable
-      defaultActiveKey={selectedCategory}
+      defaultActiveKey={selectedCategory.toString()}
       className="category-tabs"
     >
       {categories.map((category) => (
@@ -28,7 +26,7 @@ const CategoryPicker: FC = () => {
   );
 };
 
-const CategoryProducts: FC<{ categoryId: string }> = ({ categoryId }) => {
+const CategoryProducts: FC<{ categoryId: number }> = ({ categoryId }) => {
   const productsByCategory = useRecoilValue(
     productsByCategoryState(categoryId),
   );

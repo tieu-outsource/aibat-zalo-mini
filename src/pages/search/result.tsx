@@ -3,8 +3,9 @@ import { ProductPicker } from "components/product/picker";
 import { ProductSearchResultSkeleton } from "components/skeletons";
 import React, { FC, Suspense } from "react";
 import { useRecoilValue } from "recoil";
-import { resultState } from "state";
+import { resultState } from "state/product";
 import { Box, Text } from "zmp-ui";
+import logo from "static/logo.png";
 
 const SearchResultContent: FC = () => {
   const result = useRecoilValue(resultState);
@@ -21,7 +22,7 @@ const SearchResultContent: FC = () => {
                 <div onClick={open} className="flex items-center space-x-4">
                   <img
                     className="w-[88px] h-[88px] rounded-lg"
-                    src={product.image}
+                    src={product.image || logo}
                   />
                   <Box className="space-y-2">
                     <Text>{product.name}</Text>

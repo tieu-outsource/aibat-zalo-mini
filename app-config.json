@@ -1,6 +1,6 @@
 {
   "app": {
-    "title": "ZaUI Coffee",
+    "title": "Aibat",
     "headerColor": "",
     "textColor": "black",
     "statusBarColor": "#ffffff",
@@ -27,5 +27,9 @@
     "prefixCurrencySymbol": false,
     "currencySymbol": "đ",
     "headerLogo": ""
+  },
+  "api": {
+    "baseUrl": "https://miniapp-api.aibat.vn",
+    "apiKey": "489c756c-f404-47a5-94cb-58686face6b0"
   }
 }

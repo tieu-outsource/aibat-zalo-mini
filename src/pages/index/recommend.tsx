@@ -6,9 +6,10 @@ import { ProductSlideSkeleton } from "components/skeletons";
 import React, { Suspense } from "react";
 import { FC } from "react";
 import { useRecoilValue } from "recoil";
-import { recommendProductsState } from "state";
+import { recommendProductsState } from "state/product";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Box, Text } from "zmp-ui";
+import logo from "static/logo.png";
 
 export const RecommendContent: FC = () => {
   const recommendProducts = useRecoilValue(recommendProductsState);
@@ -23,7 +24,7 @@ export const RecommendContent: FC = () => {
                 <div onClick={open} className="space-y-3">
                   <Box
                     className="relative aspect-video rounded-lg bg-cover bg-center bg-skeleton"
-                    style={{ backgroundImage: `url(${product.image})` }}
+                    style={{ backgroundImage: `url(${product.image || logo})` }}
                   >
                     {product.sale && (
                       <Text

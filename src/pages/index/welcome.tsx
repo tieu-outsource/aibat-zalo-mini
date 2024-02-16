@@ -1,13 +1,13 @@
 import React, { FC } from "react";
 import { Box, Header, Text } from "zmp-ui";
 import { useRecoilValueLoadable } from "recoil";
-import { userState } from "state";
 import logo from "static/logo.png";
-import appConfig from "../../../app-config.json";
-import { getConfig } from "utils/config";
+import { userState } from "state";
+import { configInfoState } from "state/config";
 
 export const Welcome: FC = () => {
   const user = useRecoilValueLoadable(userState);
+  const configInfo = useRecoilValueLoadable(configInfoState);
 
   return (
     <Header
@@ -18,10 +18,19 @@ export const Welcome: FC = () => {
           <Box flex alignItems="center" className="space-x-2">
             <img
               className="w-8 h-8 rounded-lg border-inset"
-              src={getConfig((c) => c.template.headerLogo) || logo}
+              src={
+                configInfo.state === "hasValue"
+                  ? configInfo.contents.logo
+                  : logo
+              }
             />
             <Box>
-              <Text.Title size="small">{appConfig.app.title}</Text.Title>
+              <Text.Title size="small">
+                {configInfo.state === "hasValue"
+                  ? configInfo.contents.name
+                  : "Loading..."}
+              </Text.Title>
+
               {user.state === "hasValue" ? (
                 <Text size="xxSmall" className="text-gray">
                   Welcome, {user.contents.name}!

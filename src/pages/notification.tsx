@@ -1,9 +1,9 @@
 import React, { FC } from "react";
 import { ListRenderer } from "components/list-renderer";
 import { useRecoilValue } from "recoil";
-import { notificationsState } from "state";
 import { Box, Header, Page, Text } from "zmp-ui";
 import { Divider } from "components/divider";
+import { notificationsState } from "state";
 
 const NotificationList: FC = () => {
   const notifications = useRecoilValue(notificationsState);
