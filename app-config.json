@@ -29,7 +29,7 @@
     "headerLogo": ""
   },
   "api": {
-    "baseUrl": "https://miniapp-api.aibat.vn",
+    "baseUrl": "http://127.0.0.1:3001",
     "apiKey": "489c756c-f404-47a5-94cb-58686face6b0"
   }
 }

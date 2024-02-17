@@ -2,15 +2,16 @@ import { FinalPrice } from "components/display/final-price";
 import { Sheet } from "components/fullscreen-sheet";
 import React, { FC, ReactNode, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { cartState } from "state";
 import { SelectedOptions } from "types/cart";
-import { Product } from "types/product";
+import { Product, Variant } from "types/product";
 import { isIdentical } from "utils/product";
 import { Box, Button, Text } from "zmp-ui";
 import { MultipleOptionPicker } from "./multiple-option-picker";
 import { QuantityPicker } from "./quantity-picker";
 import { SingleOptionPicker } from "./single-option-picker";
+import { variantsByProductState } from "state/product";
 
 export interface ProductPickerProps {
   product?: Product;
@@ -21,17 +22,17 @@ export interface ProductPickerProps {
   children: (methods: { open: () => void; close: () => void }) => ReactNode;
 }
 
-function getDefaultOptions(product?: Product) {
-  if (product && product.variants) {
-    return product.variants.reduce(
-      (options, variant) =>
-        Object.assign(options, {
-          [variant.id]: variant.default,
-        }),
-      {},
-    );
-  }
-  return {};
+function getDefaultOptions(variants: Variant[]): SelectedOptions {
+  const firstVariant = variants[0];
+
+  return firstVariant.options.reduce<SelectedOptions>((acc, option) => {
+    if (firstVariant.type === "single") {
+      acc[option.id] = firstVariant.options[0].id;
+    } else {
+      acc[option.id] = [];
+    }
+    return acc;
+  }, {});
 }
 
 export const ProductPicker: FC<ProductPickerProps> = ({
@@ -40,11 +41,16 @@ export const ProductPicker: FC<ProductPickerProps> = ({
   selected,
 }) => {
   const [visible, setVisible] = useState(false);
-  const [options, setOptions] = useState<SelectedOptions>(
-    selected ? selected.options : getDefaultOptions(product),
-  );
   const [quantity, setQuantity] = useState(1);
   const setCart = useSetRecoilState(cartState);
+
+  const variants = useRecoilValue(
+    variantsByProductState(product?.id ?? 0),
+  );
+
+  const [options, setOptions] = useState<SelectedOptions>(
+    selected ? selected.options : getDefaultOptions(variants),
+  );
 
   useEffect(() => {
     if (selected) {
@@ -131,8 +137,8 @@ export const ProductPicker: FC<ProductPickerProps> = ({
                 </Text>
               </Box>
               <Box className="space-y-5">
-                {product.variants &&
-                  product.variants.map((variant) =>
+                {variants &&
+                  variants.map((variant) =>
                     variant.type === "single" ? (
                       <SingleOptionPicker
                         key={variant.id}

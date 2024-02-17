@@ -42,5 +42,4 @@ export interface Product {
   categoryId?: string[];
   description?: string;
   sale?: Sale;
-  variants?: Variant[];
 }

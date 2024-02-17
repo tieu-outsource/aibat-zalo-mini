@@ -1,5 +1,5 @@
 import { atom, selector, selectorFamily } from "recoil";
-import { Product } from "types/product";
+import { BaseVariant, Product, Variant } from "types/product";
 import { getConfig } from "utils/config";
 
 export const productsState = selector<Product[]>({
@@ -76,4 +76,24 @@ export const resultState = selector<Product[]>({
     const data = await response.json();
     return data
   },
+});
+
+
+export const variantsByProductState = selectorFamily<Variant[], number>({
+  key: "variantsByProduct",
+  get:
+    (productId) =>
+      async () => {
+        const url = getConfig((config) => config.api.baseUrl);
+        const apiKey = getConfig((config) => config.api.apiKey);
+
+        const response = await fetch(`${url}/products/${productId}/variants`, {
+          headers: {
+            "x-api-key": apiKey,
+          },
+        });
+
+        const data = await response.json();
+        return data
+      },
 });
