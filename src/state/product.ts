@@ -77,23 +77,3 @@ export const resultState = selector<Product[]>({
     return data
   },
 });
-
-
-export const variantsByProductState = selectorFamily<Variant[], number>({
-  key: "variantsByProduct",
-  get:
-    (productId) =>
-      async () => {
-        const url = getConfig((config) => config.api.baseUrl);
-        const apiKey = getConfig((config) => config.api.apiKey);
-
-        const response = await fetch(`${url}/products/${productId}/variants`, {
-          headers: {
-            "x-api-key": apiKey,
-          },
-        });
-
-        const data = await response.json();
-        return data
-      },
-});
