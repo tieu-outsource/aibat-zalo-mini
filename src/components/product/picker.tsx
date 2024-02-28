@@ -1,4 +1,3 @@
-import { FinalPrice } from "components/display/final-price";
 import { Sheet } from "components/fullscreen-sheet";
 import React, { FC, ReactNode, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
@@ -11,6 +10,8 @@ import { Box, Button, Text } from "zmp-ui";
 import { MultipleOptionPicker } from "./multiple-option-picker";
 import { QuantityPicker } from "./quantity-picker";
 import { SingleOptionPicker } from "./single-option-picker";
+import logo from "static/logo.png";
+import { DisplayPrice } from "components/display/price";
 
 const a1: Attribute = {
   id: "1",
@@ -41,19 +42,6 @@ export interface ProductPickerProps {
   children: (methods: { open: () => void; close: () => void }) => ReactNode;
 }
 
-function getDefaultOptions(variants: Variant[]): SelectedOptions {
-  const firstVariant = variants[0];
-
-  return firstVariant.options.reduce<SelectedOptions>((acc, option) => {
-    if (firstVariant.type === "single") {
-      acc[option.id] = firstVariant.options[0].id;
-    } else {
-      acc[option.id] = [];
-    }
-    return acc;
-  }, {});
-}
-
 export const ProductPicker: FC<ProductPickerProps> = ({
   children,
   product,
@@ -69,14 +57,22 @@ export const ProductPicker: FC<ProductPickerProps> = ({
         close: () => setVisible(false),
       })}
       {createPortal(
-        <Sheet visible={visible} onClose={() => setVisible(false)} autoHeight>
+        <Sheet visible={visible} onClose={() => setVisible(false)} height="90%">
           {product && (
-            <Box className="space-y-6 mt-2" p={4}>
+            <Box className="space-y-6 mt-2 overflow-y-auto" p={4}>
+              <Box className="w-full aspect-square relative">
+                <img
+                  loading="lazy"
+                  src={product.image || logo}
+                  className="absolute left-0 right-0 top-0 bottom-0 w-full h-full object-cover object-center rounded-lg bg-skeleton"
+                />
+              </Box>
+
               <Box className="space-y-2">
                 <Text.Title>{product.name}</Text.Title>
-                <Text>
-                  asdf
-                </Text>
+                <DisplayPrice>
+                  {product.price}
+                </DisplayPrice>
                 <Text>
                   <div
                     dangerouslySetInnerHTML={{
@@ -87,6 +83,18 @@ export const ProductPicker: FC<ProductPickerProps> = ({
               </Box>
 
               <Box className="space-y-5">
+                <SingleOptionPicker
+                  attribute={a1}
+                  value={"1"}
+                  onChange={(value) => { }}
+                />
+
+                <SingleOptionPicker
+                  attribute={a1}
+                  value={"1"}
+                  onChange={(value) => { }}
+                />
+
                 <SingleOptionPicker
                   attribute={a1}
                   value={"1"}
