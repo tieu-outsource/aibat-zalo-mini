@@ -5,13 +5,32 @@ import { createPortal } from "react-dom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { cartState } from "state";
 import { SelectedOptions } from "types/cart";
-import { Product, Variant } from "types/product";
+import { Attribute, Product, Variant } from "types/product";
 import { isIdentical } from "utils/product";
 import { Box, Button, Text } from "zmp-ui";
 import { MultipleOptionPicker } from "./multiple-option-picker";
 import { QuantityPicker } from "./quantity-picker";
 import { SingleOptionPicker } from "./single-option-picker";
-import { variantsByProductState } from "state/product";
+
+const a1: Attribute = {
+  id: "1",
+  label: "Size",
+  options: [
+    { id: "1", label: "S" },
+    { id: "2", label: "M" },
+    { id: "3", label: "L" },
+  ],
+};
+
+const a2: Attribute = {
+  id: "2",
+  label: "Color",
+  options: [
+    { id: "1", label: "Red" },
+    { id: "2", label: "Green" },
+    { id: "3", label: "Blue" },
+  ],
+};
 
 export interface ProductPickerProps {
   product?: Product;
@@ -42,77 +61,7 @@ export const ProductPicker: FC<ProductPickerProps> = ({
 }) => {
   const [visible, setVisible] = useState(false);
   const [quantity, setQuantity] = useState(1);
-  const setCart = useSetRecoilState(cartState);
 
-  const variants = useRecoilValue(
-    variantsByProductState(product?.id ?? 0),
-  );
-
-  const [options, setOptions] = useState<SelectedOptions>(
-    selected ? selected.options : getDefaultOptions(variants),
-  );
-
-  useEffect(() => {
-    if (selected) {
-      setOptions(selected.options);
-      setQuantity(selected.quantity);
-    }
-  }, [selected]);
-
-  const addToCart = () => {
-    if (product) {
-      setCart((cart) => {
-        let res = [...cart];
-        if (selected) {
-          // updating an existing cart item, including quantity and size, or remove it if new quantity is 0
-          const editing = cart.find(
-            (item) =>
-              item.product.id === product.id &&
-              isIdentical(item.options, selected.options),
-          )!;
-          if (quantity === 0) {
-            res.splice(cart.indexOf(editing), 1);
-          } else {
-            const existed = cart.find(
-              (item, i) =>
-                i !== cart.indexOf(editing) &&
-                item.product.id === product.id &&
-                isIdentical(item.options, options),
-            )!;
-            res.splice(cart.indexOf(editing), 1, {
-              ...editing,
-              options,
-              quantity: existed ? existed.quantity + quantity : quantity,
-            });
-            if (existed) {
-              res.splice(cart.indexOf(existed), 1);
-            }
-          }
-        } else {
-          // adding new item to cart, or merging if it already existed before
-          const existed = cart.find(
-            (item) =>
-              item.product.id === product.id &&
-              isIdentical(item.options, options),
-          );
-          if (existed) {
-            res.splice(cart.indexOf(existed), 1, {
-              ...existed,
-              quantity: existed.quantity + quantity,
-            });
-          } else {
-            res = res.concat({
-              product,
-              options,
-              quantity,
-            });
-          }
-        }
-        return res;
-      });
-    }
-    setVisible(false);
-  };
   return (
     <>
       {children({
@@ -126,7 +75,7 @@ export const ProductPicker: FC<ProductPickerProps> = ({
               <Box className="space-y-2">
                 <Text.Title>{product.name}</Text.Title>
                 <Text>
-                  <FinalPrice options={options}>{product}</FinalPrice>
+                  asdf
                 </Text>
                 <Text>
                   <div
@@ -136,43 +85,28 @@ export const ProductPicker: FC<ProductPickerProps> = ({
                   ></div>
                 </Text>
               </Box>
+
               <Box className="space-y-5">
-                {variants &&
-                  variants.map((variant) =>
-                    variant.type === "single" ? (
-                      <SingleOptionPicker
-                        key={variant.id}
-                        variant={variant}
-                        value={options[variant.id] as string}
-                        onChange={(selectedOption) =>
-                          setOptions((prevOptions) => ({
-                            ...prevOptions,
-                            [variant.id]: selectedOption,
-                          }))
-                        }
-                      />
-                    ) : (
-                      <MultipleOptionPicker
-                        key={variant.id}
-                        product={product}
-                        variant={variant}
-                        value={options[variant.id] as string[]}
-                        onChange={(selectedOption) =>
-                          setOptions((prevOptions) => ({
-                            ...prevOptions,
-                            [variant.id]: selectedOption,
-                          }))
-                        }
-                      />
-                    ),
-                  )}
+                <SingleOptionPicker
+                  attribute={a1}
+                  value={"1"}
+                  onChange={(value) => { }}
+                />
+
+                <SingleOptionPicker
+                  attribute={a1}
+                  value={"1"}
+                  onChange={(value) => { }}
+                />
+              </Box>
+
+              <Box className="space-y-5">
                 <QuantityPicker value={quantity} onChange={setQuantity} />
                 {selected ? (
                   <Button
                     variant={quantity > 0 ? "primary" : "secondary"}
                     type={quantity > 0 ? "highlight" : "neutral"}
                     fullWidth
-                    onClick={addToCart}
                   >
                     {quantity > 0
                       ? selected
@@ -186,7 +120,6 @@ export const ProductPicker: FC<ProductPickerProps> = ({
                     variant="primary"
                     type="highlight"
                     fullWidth
-                    onClick={addToCart}
                   >
                     Thêm vào giỏ hàng
                   </Button>
