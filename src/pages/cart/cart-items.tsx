@@ -25,7 +25,7 @@ export const CartItems: FC = () => {
                 open();
               }}
               renderKey={({ product, variant, quantity }) =>
-                variant.id.toString() + quantity
+                `${product.id}-${variant.id}-${quantity}`
               }
               renderLeft={(item) => (
                 <img

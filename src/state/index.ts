@@ -83,7 +83,7 @@ export const totalPriceState = selector({
     const cart = get(cartState);
     return cart.reduce(
       (total, item) =>
-        total + item.quantity * calcFinalPrice(item.product, item.options),
+        total + item.quantity * item.variant.price,
       0,
     );
   },

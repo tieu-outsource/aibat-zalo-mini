@@ -24,11 +24,11 @@ export const ProductPicker: FC<ProductPickerProps> = ({
   selected,
 }) => {
   const [visible, setVisible] = useState(false);
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(selected?.quantity || 1);
   const [variants, setVariants] = useState<Variant[]>([]);
   const [attributes, setAttributes] = useState<Attribute[]>([]);
 
-  const [selectedOptions, setSelectedOptions] = useState<{ [key: string]: string }>({}); // { "Color": "Red", "Size": "M" }
+  const [selectedOptions, setSelectedOptions] = useState<{ [key: string]: string }>(selected?.selectedOptions || {}); // { "Color": "Red", "Size": "M" }
 
   const setCart = useSetRecoilState(cartState);
 
@@ -75,6 +75,7 @@ export const ProductPicker: FC<ProductPickerProps> = ({
       product: product,
       variant: selectedVariant,
       quantity: quantity,
+      selectedOptions: selectedOptions,
     };
 
     setCart((prev) => {
@@ -101,6 +102,7 @@ export const ProductPicker: FC<ProductPickerProps> = ({
       product: product,
       variant: selectedVariant,
       quantity: quantity,
+      selectedOptions: selectedOptions,
     };
 
     setCart((prev) => {
