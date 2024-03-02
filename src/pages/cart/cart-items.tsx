@@ -24,8 +24,8 @@ export const CartItems: FC = () => {
                 setEditingItem(item);
                 open();
               }}
-              renderKey={({ product, options, quantity }) =>
-                JSON.stringify({ product: product.id, options, quantity })
+              renderKey={({ product, variant, quantity }) =>
+                variant.id.toString() + quantity
               }
               renderLeft={(item) => (
                 <img
@@ -38,14 +38,12 @@ export const CartItems: FC = () => {
                   <Box className="space-y-1 flex-1">
                     <Text size="small">{item.product.name}</Text>
                     <Text className="text-gray" size="xSmall">
-                      <FinalPrice options={item.options}>
+                      <FinalPrice>
                         {item.product}
                       </FinalPrice>
                     </Text>
                     <Text className="text-gray" size="xxxSmall">
-                      <DisplaySelectedOptions options={item.options}>
-                        {item.product}
-                      </DisplaySelectedOptions>
+                      variant price
                     </Text>
                   </Box>
                   <Text className="text-primary font-medium" size="small">

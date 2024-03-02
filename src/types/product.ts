@@ -32,8 +32,6 @@ export interface MultipleOptionVariant extends BaseVariant {
   default?: string[];
 }
 
-export type Variant = SingleOptionVariant | MultipleOptionVariant;
-
 export interface Attribute {
   id: string;
   label: string;
@@ -51,4 +49,17 @@ export interface Product {
   categoryId?: string[];
   description?: string;
   sale?: Sale;
+}
+
+export interface Variant {
+  id: number;
+  name: string;
+  price: number;
+  inStock: number;
+  sku: string;
+  available: number;
+  attributes: {
+    name: string;
+    value: string;
+  }[];
 }

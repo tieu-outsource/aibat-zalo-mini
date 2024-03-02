@@ -1,20 +1,20 @@
 import { Sheet } from "components/fullscreen-sheet";
 import React, { FC, ReactNode, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
-import { Attribute, Product } from "types/product";
+import { Attribute, Product, Variant } from "types/product";
 import { Box, Button, Text } from "zmp-ui";
 import { QuantityPicker } from "./quantity-picker";
 import { SingleOptionPicker } from "./single-option-picker";
 import logo from "static/logo.png";
 import { DisplayPrice } from "components/display/price";
 import { getConfig } from "utils/config";
+import { useSetRecoilState } from "recoil";
+import { cartState } from "state";
+import { CartItem } from "types/cart";
 
 export interface ProductPickerProps {
   product?: Product;
-  selected?: {
-    options: any;
-    quantity: number;
-  };
+  selected?: CartItem;
   children: (methods: { open: () => void; close: () => void }) => ReactNode;
 }
 
@@ -25,10 +25,12 @@ export const ProductPicker: FC<ProductPickerProps> = ({
 }) => {
   const [visible, setVisible] = useState(false);
   const [quantity, setQuantity] = useState(1);
-  const [variants, setVariants] = useState<any[]>([]);
+  const [variants, setVariants] = useState<Variant[]>([]);
   const [attributes, setAttributes] = useState<Attribute[]>([]);
 
   const [selectedOptions, setSelectedOptions] = useState<{ [key: string]: string }>({}); // { "Color": "Red", "Size": "M" }
+
+  const setCart = useSetRecoilState(cartState);
 
   async function fetchVariants() {
     const productId = product?.id;
@@ -62,6 +64,58 @@ export const ProductPicker: FC<ProductPickerProps> = ({
       });
     });
   }, [variants, selectedOptions]);
+
+  const handleAddToCart = () => {
+    if (selected) return;
+    if (quantity === 0) return;
+    if (!selectedVariant) return;
+    if (!product) return;
+
+    const cartItem: CartItem = {
+      product: product,
+      variant: selectedVariant,
+      quantity: quantity,
+    };
+
+    setCart((prev) => {
+      const index = prev.findIndex((item) => item.variant.id === selectedVariant.id);
+      if (index !== -1) {
+        const newItems = [...prev];
+        newItems[index] = cartItem;
+        return newItems;
+      } else {
+        return [...prev, cartItem];
+      }
+    });
+
+    setVisible(false);
+  };
+
+  const handleUpdateCart = () => {
+    if (!selected) return;
+    if (quantity === 0) return;
+    if (!selectedVariant) return;
+    if (!product) return;
+
+    const cartItem: CartItem = {
+      product: product,
+      variant: selectedVariant,
+      quantity: quantity,
+    };
+
+    setCart((prev) => {
+      const index = prev.findIndex((item) => item.variant.id === selectedVariant.id);
+      if (index !== -1) {
+        const newItems = [...prev];
+        newItems[index] = cartItem;
+        return newItems;
+      } else {
+        return prev;
+      }
+    });
+
+    setVisible(false);
+  }
 
   return (
     <>
@@ -115,8 +169,9 @@ export const ProductPicker: FC<ProductPickerProps> = ({
                 <QuantityPicker value={quantity} onChange={setQuantity} />
                 {selected ? (
                   <Button
-                    variant={quantity > 0 ? "primary" : "secondary"}
-                    type={quantity > 0 ? "highlight" : "neutral"}
+                    onClick={handleUpdateCart}
+                    variant={(quantity > 0) ? "primary" : "secondary"}
+                    type={(quantity > 0) ? "highlight" : "neutral"}
                     fullWidth
                   >
                     {quantity > 0
@@ -127,7 +182,8 @@ export const ProductPicker: FC<ProductPickerProps> = ({
                   </Button>
                 ) : (
                   <Button
-                    disabled={!quantity}
+                    onClick={handleAddToCart}
+                    disabled={!quantity || !selectedVariant}
                     variant="primary"
                     type="highlight"
                     fullWidth
