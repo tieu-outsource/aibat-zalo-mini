@@ -46,7 +46,7 @@ export const ProductPicker: FC<ProductPickerProps> = ({
     });
 
     const data = await response.json();
-    setVariants(data);
+    setVariants(data || []);
     setAttributes(extractAttributes(data))
   }
 
@@ -58,7 +58,7 @@ export const ProductPicker: FC<ProductPickerProps> = ({
   }
 
   const selectedVariant = useMemo(() => {
-    return variants.find((variant) => {
+    return variants?.find((variant) => {
       return variant.attributes.every((attribute) => {
         return selectedOptions[attribute.name] === attribute.value;
       });

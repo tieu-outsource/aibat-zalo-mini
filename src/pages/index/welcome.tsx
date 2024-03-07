@@ -9,6 +9,8 @@ export const Welcome: FC = () => {
   const user = useRecoilValueLoadable(userState);
   const configInfo = useRecoilValueLoadable(configInfoState);
 
+  console.log(configInfo.contents.logo, "configInfo.contents.logo")
+
   return (
     <Header
       className="app-header no-border pl-4 flex-none pb-[6px]"
@@ -20,7 +22,7 @@ export const Welcome: FC = () => {
               className="w-8 h-8 rounded-lg border-inset"
               src={
                 configInfo.state === "hasValue"
-                  ? configInfo.contents.logo
+                  ? configInfo.contents.logo || logo
                   : logo
               }
             />

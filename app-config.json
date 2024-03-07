@@ -29,7 +29,7 @@
     "headerLogo": ""
   },
   "api": {
-    "baseUrl": "http://miniapp-api.aibat.vn",
+    "baseUrl": "https://miniapp-api.aibat.vn",
     "apiKey": "7c4b1a2a-c8c6-4164-8186-499737329b1a"
   }
 }
