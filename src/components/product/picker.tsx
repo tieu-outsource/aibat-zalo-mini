@@ -58,6 +58,8 @@ export const ProductPicker: FC<ProductPickerProps> = ({
   }
 
   const selectedVariant = useMemo(() => {
+    if (variants.length === 1) return variants[0];
+
     return variants?.find((variant) => {
       return variant.attributes.every((attribute) => {
         return selectedOptions[attribute.name] === attribute.value;
@@ -207,32 +209,34 @@ function extractAttributes(variants: any[]): Attribute[] {
   const attributes = {};
 
   variants.forEach(item => {
-    item.attributes.forEach(attribute => {
-      const attributeName = attribute.name;
-      const attributeValue = attribute.value;
+    item.attributes
+      .filter(attribute => !!attribute.name)
+      .forEach(attribute => {
+        const attributeName = attribute.name;
+        const attributeValue = attribute.value;
 
-      if (!attributes[attributeName]) {
-        // If the attribute is not present in the result object, add it
-        attributes[attributeName] = {
-          id: attributeName,
-          label: attributeName,
-          options: [],
-        };
-      }
+        if (!attributes[attributeName]) {
+          // If the attribute is not present in the result object, add it
+          attributes[attributeName] = {
+            id: attributeName,
+            label: attributeName,
+            options: [],
+          };
+        }
 
-      const attributeOptions = attributes[attributeName].options;
+        const attributeOptions = attributes[attributeName].options;
 
-      // Check if the attribute value already exists in options
-      const existingOption = attributeOptions.find(option => option.label === attributeValue);
+        // Check if the attribute value already exists in options
+        const existingOption = attributeOptions.find(option => option.label === attributeValue);
 
-      if (!existingOption) {
-        // If the attribute value is not present in options, add it
-        attributeOptions.push({
-          id: attributeValue,
-          label: attributeValue,
-        });
-      }
-    });
+        if (!existingOption) {
+          // If the attribute value is not present in options, add it
+          attributeOptions.push({
+            id: attributeValue,
+            label: attributeValue,
+          });
+        }
+      });
   });
 
   // Convert the result object to an array
