@@ -9,4 +9,15 @@ export interface CartItem {
   selectedOptions: SelectedOptions;
 }
 
+export type CreateOrderPayload = {
+  phone: string;
+  name: string;
+  address: string;
+  note: string;
+  items: {
+    variantId: number;
+    quantity: number;
+  }[]
+}
+
 export type Cart = CartItem[];

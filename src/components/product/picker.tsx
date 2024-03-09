@@ -12,6 +12,8 @@ import { useSetRecoilState } from "recoil";
 import { cartState } from "state";
 import { CartItem } from "types/cart";
 
+// TODO: handle remove
+
 export interface ProductPickerProps {
   product?: Product;
   selected?: CartItem;

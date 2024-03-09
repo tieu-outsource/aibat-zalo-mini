@@ -270,3 +270,13 @@ export const phoneState = selector<string | boolean>({
     return false;
   },
 });
+
+export const orderNoteState = atom<string>({
+  key: "orderNote",
+  default: "",
+});
+
+export const orderAddressState = atom<string>({
+  key: "orderAddress",
+  default: "",
+});
