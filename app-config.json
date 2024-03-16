@@ -28,9 +28,11 @@
     "currencySymbol": "đ",
     "headerLogo": ""
   },
+  "api_": {
+    "baseUrl": "https://miniapp-api.aibat.vn",
+    "apiKey": "7c4b1a2a-c8c6-4164-8186-499737329b1a"
+  },
   "api": {
-    "baseUrl_prod": "https://miniapp-api.aibat.vn",
-    "apiKey_prod": "7c4b1a2a-c8c6-4164-8186-499737329b1a",
     "baseUrl": "http://localhost:3001",
     "apiKey": "489c756c-f404-47a5-94cb-58686face6b0"
   }

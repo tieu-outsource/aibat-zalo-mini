@@ -3,6 +3,7 @@ import { Box, Header, Icon, Page, Text } from "zmp-ui";
 import subscriptionDecor from "static/subscription-decor.svg";
 import { ListRenderer } from "components/list-renderer";
 import { useToBeImplemented } from "hooks";
+import { useNavigate } from "react-router-dom";
 
 const Subscription: FC = () => {
   const onClick = useToBeImplemented();
@@ -24,7 +25,13 @@ const Subscription: FC = () => {
 };
 
 const Personal: FC = () => {
-  const onClick = useToBeImplemented();
+  const navigate = useNavigate();
+
+  const onClick = ({ key }: any) => {
+    if (key === "history") {
+      navigate("/order-history");
+    }
+  }
 
   return (
     <Box className="m-4">
@@ -33,17 +40,7 @@ const Personal: FC = () => {
         onClick={onClick}
         items={[
           {
-            left: <Icon icon="zi-user" />,
-            right: (
-              <Box flex>
-                <Text.Header className="flex-1 items-center font-normal">
-                  Thông tin tài khoản
-                </Text.Header>
-                <Icon icon="zi-chevron-right" />
-              </Box>
-            ),
-          },
-          {
+            key: "history",
             left: <Icon icon="zi-clock-2" />,
             right: (
               <Box flex>
@@ -63,7 +60,13 @@ const Personal: FC = () => {
 };
 
 const Other: FC = () => {
-  const onClick = useToBeImplemented();
+  const navigate = useNavigate();
+
+  const onClick = ({ key }: any) => {
+    if (key === "contact") {
+      navigate("/contact");
+    }
+  }
 
   return (
     <Box className="m-4">
@@ -72,17 +75,7 @@ const Other: FC = () => {
         onClick={onClick}
         items={[
           {
-            left: <Icon icon="zi-star" />,
-            right: (
-              <Box flex>
-                <Text.Header className="flex-1 items-center font-normal">
-                  Đánh giá đơn hàng
-                </Text.Header>
-                <Icon icon="zi-chevron-right" />
-              </Box>
-            ),
-          },
-          {
+            key: "contact",
             left: <Icon icon="zi-call" />,
             right: (
               <Box flex>
@@ -105,7 +98,7 @@ const ProfilePage: FC = () => {
   return (
     <Page>
       <Header showBackIcon={false} title="&nbsp;" />
-      <Subscription />
+      {/* <Subscription /> */}
       <Personal />
       <Other />
     </Page>
