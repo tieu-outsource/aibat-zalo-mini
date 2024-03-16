@@ -1,6 +1,7 @@
 import { atom, selector, selectorFamily } from "recoil";
 import {
   authorize,
+  getAccessToken,
   getLocation,
   getPhoneNumber,
   getSetting,
@@ -256,16 +257,23 @@ export const phoneState = selector<string | boolean>({
       if (number) {
         return number;
       }
-      console.warn(
-        "Sử dụng token này để truy xuất số điện thoại của người dùng",
-        token,
-      );
-      console.warn(
-        "Chi tiết tham khảo: ",
-        "https://mini.zalo.me/blog/thong-bao-thay-doi-luong-truy-xuat-thong-tin-nguoi-dung-tren-zalo-mini-app",
-      );
-      console.warn("Giả lập số điện thoại mặc định: 0337076898");
-      return "0337076898";
+
+      const userAccessToken = await getAccessToken();
+
+      const url = getConfig((config) => config.api.baseUrl);
+      const apiKey = getConfig((config) => config.api.apiKey);
+      const response = await fetch(`${url}/zalo/phone?code=${token}&token=${userAccessToken}`, {
+        headers: {
+          "x-api-key": apiKey,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        return data.phone;
+      }
+
+      return "0987654321"; // TODO: handle error
     }
     return false;
   },
