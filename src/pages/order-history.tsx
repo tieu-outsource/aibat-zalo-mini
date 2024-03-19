@@ -72,20 +72,22 @@ const OrderHistoryList: FC = () => {
                 size="small"
                 className="overflow-hidden whitespace-nowrap text-ellipsis"
               >
-                {order.code}
+                {order.code || "N/A"}
+              </Text>
+            </div>
+            <div className="flex justify-between">
+              <Text size="small" className="text-gray">
+                {order.createdAt?.toLocaleDateString('vi-VN') || 'N/A'}
               </Text>
               <Text
                 size="small"
                 className="text-red-600 overflow-hidden whitespace-nowrap text-ellipsis"
               >
                 <DisplayPrice>
-                  {order.price}
+                  {order.price || 0}
                 </DisplayPrice>
               </Text>
             </div>
-            <Text size="small" className="text-gray">
-              {order.createdAt.toLocaleDateString()}
-            </Text>
           </Box>
         )}
       />
