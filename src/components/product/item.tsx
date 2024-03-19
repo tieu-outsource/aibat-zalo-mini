@@ -4,6 +4,7 @@ import { Product } from "types/product";
 import { Box, Text } from "zmp-ui";
 import { ProductPicker } from "./picker";
 import logo from "static/logo.png";
+import { DisplayPrice } from "components/display/price";
 
 export const ProductItem: FC<{ product: Product }> = ({ product }) => {
   return (
@@ -18,8 +19,14 @@ export const ProductItem: FC<{ product: Product }> = ({ product }) => {
             />
           </Box>
           <Text>{product.name}</Text>
-          <Text size="xxSmall" className="text-gray pb-2">
-            <FinalPrice>{product}</FinalPrice>
+          {
+            product.isSale &&
+            <Text size="xxSmall" className="line-through text-gray">
+              <DisplayPrice>{product.price}</DisplayPrice>
+            </Text>
+          }
+          <Text size="large" className="font-medium text-primary">
+            <DisplayPrice>{product.currentPrice}</DisplayPrice>
           </Text>
         </div>
       )}

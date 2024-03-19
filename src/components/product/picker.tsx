@@ -146,9 +146,16 @@ export const ProductPicker: FC<ProductPickerProps> = ({
 
               <Box className="space-y-2">
                 <Text.Title>{product.name}</Text.Title>
-                <DisplayPrice>
-                  {product.price}
-                </DisplayPrice>
+                {
+                  product.isSale &&
+                  <Text size="xxSmall" className="line-through text-gray">
+                    <DisplayPrice>{product.price}</DisplayPrice>
+                  </Text>
+                }
+                <Text size="large" className="font-medium text-primary">
+                  <DisplayPrice>{product.currentPrice}</DisplayPrice>
+                </Text>
+
                 <Text>
                   <div
                     dangerouslySetInnerHTML={{

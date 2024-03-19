@@ -1,4 +1,5 @@
 import { FinalPrice } from "components/display/final-price";
+import { DisplayPrice } from "components/display/price";
 import { DisplaySelectedOptions } from "components/display/selected-options";
 import { ListRenderer } from "components/list-renderer";
 import { ProductPicker } from "components/product/picker";
@@ -38,9 +39,9 @@ export const CartItems: FC = () => {
                   <Box className="space-y-1 flex-1">
                     <Text size="small">{item.product.name}</Text>
                     <Text className="text-gray" size="xSmall">
-                      <FinalPrice>
-                        {item.product}
-                      </FinalPrice>
+                      <DisplayPrice>
+                        {item.product.currentPrice}
+                      </DisplayPrice>
                     </Text>
                     <Text className="text-gray" size="xxxSmall">
                       variant price

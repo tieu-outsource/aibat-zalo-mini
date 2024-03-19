@@ -42,11 +42,14 @@ export const RecommendContent: FC = () => {
                   </Box>
                   <Box className="space-y-1">
                     <Text size="small">{product.name}</Text>
-                    <Text size="xxSmall" className="line-through text-gray">
-                      <DisplayPrice>{product.price}</DisplayPrice>
-                    </Text>
+                    {
+                      product.isSale &&
+                      <Text size="xxSmall" className="line-through text-gray">
+                        <DisplayPrice>{product.price}</DisplayPrice>
+                      </Text>
+                    }
                     <Text size="large" className="font-medium text-primary">
-                      <FinalPrice>{product}</FinalPrice>
+                      <DisplayPrice>{product.currentPrice}</DisplayPrice>
                     </Text>
                   </Box>
                 </div>

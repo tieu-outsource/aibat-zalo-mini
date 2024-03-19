@@ -1,4 +1,4 @@
-import { atom, selector, selectorFamily } from "recoil";
+import { atom, selector } from "recoil";
 import {
   authorize,
   getAccessToken,
@@ -9,13 +9,10 @@ import {
 } from "zmp-sdk";
 import logo from "static/logo.png";
 import { Category } from "types/category";
-import { Product, Variant } from "types/product";
 import { Cart } from "types/cart";
 import { Notification } from "types/notification";
 import { calculateDistance } from "utils/location";
 import { Store } from "types/delivery";
-import { calcFinalPrice } from "utils/product";
-import { wait } from "utils/async";
 import { getConfig } from "utils/config";
 
 export const authorizedState = selector({
@@ -84,7 +81,7 @@ export const totalPriceState = selector({
     const cart = get(cartState);
     return cart.reduce(
       (total, item) =>
-        total + item.quantity * item.variant.price,
+        total + item.quantity * item.variant.currentPrice,
       0,
     );
   },

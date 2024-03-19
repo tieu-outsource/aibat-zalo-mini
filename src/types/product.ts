@@ -42,10 +42,12 @@ export interface Attribute {
 }
 
 export interface Product {
+  isSale: boolean;
   id: number;
   name: string;
   image: string;
   price: number;
+  currentPrice: number;
   categoryId?: string[];
   description?: string;
   sale?: Sale;
@@ -55,6 +57,7 @@ export interface Variant {
   id: number;
   name: string;
   price: number;
+  currentPrice: number;
   inStock: number;
   sku: string;
   available: number;
