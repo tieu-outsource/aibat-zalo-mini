@@ -21,7 +21,7 @@ const OrderHistoryList: FC = () => {
     const url = getConfig((config) => config.api.baseUrl);
     const apiKey = getConfig((config) => config.api.apiKey);
 
-    const response = await fetch(`${url}/orders/history?phone=${phone}`, {
+    const response = await fetch(`${url}/orders/history?phone=${phone.phone}`, {
       headers: {
         "x-api-key": apiKey,
       },

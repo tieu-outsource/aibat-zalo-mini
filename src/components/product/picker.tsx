@@ -34,7 +34,6 @@ export const ProductPicker: FC<ProductPickerProps> = ({
 
   async function fetchVariants() {
     const productId = product?.id;
-    console.log("productId", productId);
     if (!productId) return;
 
     const url = getConfig((config) => config.api.baseUrl);
@@ -59,7 +58,6 @@ export const ProductPicker: FC<ProductPickerProps> = ({
   }
 
   const selectedVariant = useMemo(() => {
-    console.log("variants", variants);
     if (variants.length === 1) return variants[0];
 
     return variants?.find((variant) => {
@@ -67,7 +65,7 @@ export const ProductPicker: FC<ProductPickerProps> = ({
         return selectedOptions[attribute.name] === attribute.value;
       });
     });
-  }, [variants, selectedOptions]);
+  }, [variants, selectedOptions, selected]);
 
   const handleAddToCart = () => {
     if (selected) return;
@@ -127,6 +125,13 @@ export const ProductPicker: FC<ProductPickerProps> = ({
     if (visible)
       fetchVariants();
   }, [visible]);
+
+  useEffect(() => {
+    if (selected) {
+      setQuantity(selected.quantity);
+      setSelectedOptions(selected.selectedOptions);
+    }
+  }, [selected]);
 
   return (
     <>

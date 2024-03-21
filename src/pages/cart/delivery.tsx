@@ -18,7 +18,7 @@ export const Delivery: FC = () => {
           {
             left: <Icon icon="zi-user" className="my-auto" />,
             right: (
-              <Suspense fallback={<RequestPersonPickerPhone />}>
+              <Suspense fallback={<div>Loading ....</div>}>
                 <PersonPicker />
               </Suspense>
             ),

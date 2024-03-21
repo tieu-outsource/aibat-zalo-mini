@@ -245,14 +245,19 @@ export const locationState = selector<
   },
 });
 
-export const phoneState = selector<string | boolean>({
+export const phoneState = selector<
+  { phone: string; error: string } | false
+>({
   key: "phone",
   get: async ({ get }) => {
     const requested = get(requestPhoneTriesState);
     if (requested) {
       const { number, token } = await getPhoneNumber({ fail: console.warn });
       if (number) {
-        return number;
+        return {
+          phone: number,
+          error: "",
+        };
       }
 
       const userAccessToken = await getAccessToken();
@@ -267,10 +272,18 @@ export const phoneState = selector<string | boolean>({
 
       if (response.ok) {
         const data = await response.json();
-        return data.phone;
+        return {
+          phone: data.phone,
+          error: "",
+        };
       }
 
-      return "0987654321"; // TODO: handle error
+      const errorText = await response.text().catch(() => "");
+
+      return {
+        phone: "",
+        error: errorText,
+      };
     }
     return false;
   },
