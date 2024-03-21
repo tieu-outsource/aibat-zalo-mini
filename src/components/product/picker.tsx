@@ -1,5 +1,5 @@
 import { Sheet } from "components/fullscreen-sheet";
-import React, { FC, ReactNode, useMemo, useState } from "react";
+import React, { FC, ReactNode, useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { Attribute, Product, Variant } from "types/product";
 import { Box, Button, Text } from "zmp-ui";
@@ -11,8 +11,6 @@ import { getConfig } from "utils/config";
 import { useSetRecoilState } from "recoil";
 import { cartState } from "state";
 import { CartItem } from "types/cart";
-
-// TODO: handle remove
 
 export interface ProductPickerProps {
   product?: Product;
@@ -36,6 +34,7 @@ export const ProductPicker: FC<ProductPickerProps> = ({
 
   async function fetchVariants() {
     const productId = product?.id;
+    console.log("productId", productId);
     if (!productId) return;
 
     const url = getConfig((config) => config.api.baseUrl);
@@ -60,6 +59,7 @@ export const ProductPicker: FC<ProductPickerProps> = ({
   }
 
   const selectedVariant = useMemo(() => {
+    console.log("variants", variants);
     if (variants.length === 1) return variants[0];
 
     return variants?.find((variant) => {
@@ -123,12 +123,16 @@ export const ProductPicker: FC<ProductPickerProps> = ({
     setVisible(false);
   }
 
+  useEffect(() => {
+    if (visible)
+      fetchVariants();
+  }, [visible]);
+
   return (
     <>
       {children({
         open: () => {
           setVisible(true);
-          fetchVariants();
         },
         close: () => setVisible(false),
       })}
