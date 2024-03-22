@@ -26,7 +26,7 @@ export const CartPreview: FC = () => {
 
   async function createOrder() {
     const createOrderPayload: CreateOrderPayload = {
-      phone: typeof phone === "string" ? phone : "",
+      phone: typeof phone?.phone === "string" ? phone?.phone : "",
       name: user.name,
       address: address,
       note: note,

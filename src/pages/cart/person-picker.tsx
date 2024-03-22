@@ -19,13 +19,11 @@ export const PersonPicker: FC = () => {
     return <RequestPersonPickerPhone />;
   }
 
-  console.log("phone", phone);
-
   if (phone && phone?.error) {
     return <ListItem title={"Không thể truy cập số điện thoại"} subtitle="Người nhận" />;
   }
 
-  return <ListItem title={`${user.name} - ${phone}`} subtitle="Người nhận" />;
+  return <ListItem title={`${user.name} - ${phone.phone}`} subtitle="Người nhận" />;
 };
 
 export const RequestPersonPickerPhone: FC = () => {
