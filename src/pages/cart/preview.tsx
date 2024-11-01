@@ -17,8 +17,8 @@ export const CartPreview: FC = () => {
   const [cart, setCart] = useRecoilState(cartState);
 
   const address = useRecoilValue(orderAddressState);
-  const user = useRecoilValueLoadable(userState).contents;
-  const phone = useRecoilValueLoadable(phoneState).contents;
+  const user = useRecoilValueLoadable(userState)?.contents;
+  const phone = useRecoilValueLoadable(phoneState)?.contents;
 
   const snackbar = useSnackbar();
 

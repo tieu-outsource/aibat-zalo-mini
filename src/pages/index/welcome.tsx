@@ -2,14 +2,10 @@ import React, { FC } from "react";
 import { Box, Header, Text } from "zmp-ui";
 import { useRecoilValueLoadable } from "recoil";
 import logo from "static/logo.png";
-import { userState } from "state";
 import { configInfoState } from "state/config";
 
 export const Welcome: FC = () => {
-  const user = useRecoilValueLoadable(userState);
   const configInfo = useRecoilValueLoadable(configInfoState);
-
-  console.log(configInfo.contents.logo, "configInfo.contents.logo")
 
   return (
     <Header
@@ -33,13 +29,9 @@ export const Welcome: FC = () => {
                   : "Loading..."}
               </Text.Title>
 
-              {user.state === "hasValue" ? (
-                <Text size="xxSmall" className="text-gray">
-                  Welcome, {user.contents.name}!
-                </Text>
-              ) : (
-                <Text>...</Text>
-              )}
+              <Text size="xxSmall" className="text-gray">
+                Welcome!
+              </Text>
             </Box>
           </Box>
         ) as unknown as string
